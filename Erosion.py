@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[48]:
+# In[113]:
 
 
-from typing import Optional, Callable, Tuple, List
+from typing import Optional, Callable, Tuple, List, NoReturn
+from functools import partial
 
 import matplotlib.pyplot as plt
 import matplotlib.image as img
@@ -12,6 +13,59 @@ import matplotlib.image as img
 import numpy as np
 import cv2 as cv
 import PIL as pil
+
+
+# In[114]:
+
+
+def binarise(src: np.ndarray, threshold: Optional[float] = None) -> np.ndarray:
+    """
+        Take a grayscale image anf
+    """
+    dst = src.copy()
+    
+    # Assign correct max and min, according to the source image dtype.
+    _floats    = [np.float, np.float16, np.float32, np.float64, np.float128]
+    _iffloat   = partial(
+        lambda im, f_val, i_val: f_val if im.dtype in _floats else i_val, 
+        src
+    )
+    _max, _min = list(map(_iffloat, [1.0, 0.0] [255, 0]))
+    
+    if threshold:
+        dst[ dst >= threshold ] = _max
+        dst[ dst <  threshold ] = _min
+    else:
+        threshold = src.mean()  # Default value for binarization
+        dst[ dst >= threshold ] = _max
+        dst[ dst <  threshold ] = _min
+    
+    return dst
+##
+
+def side_by_side(
+    image1: np.ndarray, 
+    image2: np.ndarray, 
+    title1: Optional[str] = None, 
+    title2: Optional[str] = None,
+    _figsize: Optional[Tuple[int]] = (15, 10),
+    **kw
+) -> NoReturn: 
+    """
+    """
+    
+    fig = plt.figure(figsize = _figsize)
+    
+    fig.add_subplot(2, 1, 1)
+    plt.imshow(image1, cmap = 'gray')
+    if title1:
+        plt.title(title1, size = 18)
+    
+    fig.add_subplot(2, 1, 2)
+    plt.imshow(image2, cmap = 'gray')
+    if title2:
+        plt.title(title2, size = 18)
+##
 
 
 # In[49]:
@@ -38,48 +92,11 @@ x = 1 - x
 plt.imshow(x, cmap='gray')
 
 
-# In[47]:
+# In[76]:
 
 
-def umbraliza(src: np.ndarray, threshold: Optional[float] = None) -> np.ndarray:
-    """
-    """
-    dst = src.copy()
-    
-    # Assign correct max and min, according to the source image dtype.
-    _floats    = [np.float, np.float16, np.float32, np.float64, np.float128]
-    _iffloat   = lambda im, f_val, i_val: f_val if im.dtype in _floats else i_val
-    _max, _min = _iffloat(src, 1.0, 255), _iffloat(src, 0.0, 0)
-    
-    if threshold:
-        dst[ dst >= threshold ] = _max
-        dst[ dst <  threshold ] = _min
-    else:
-        threshold = src.mean()
-        dst[ dst >= threshold ] = _max
-        dst[ dst <  threshold ] = _min
-    
-    return dst
-    
-
-
-# In[57]:
-
-
-plt.imshow(umbraliza(x), cmap='gray')
-
-
-# In[17]:
-
-
-binaria[ binaria >= x.mean()] = 1.0
-x[ x < x.mean()]  = 0.0
-
-
-# In[18]:
-
-
-plt.imshow(x, cmap='gray')
+binaria = umbraliza(x)
+plt.imshow(binaria, cmap='gray')
 
 
 # In[19]:
@@ -88,53 +105,25 @@ plt.imshow(x, cmap='gray')
 help(cv.erode)
 
 
-# In[22]:
+# In[112]:
 
 
-kernel = np.ones(1)
-kernel
+kernel = np.ones((10, 10))
+side_by_side(binaria, cv.erode(binaria, kernel), title1='Original', title2=f'Kernel {kernel.shape}')
 
 
-# In[21]:
+# In[108]:
 
 
-plt.imshow
+kernel = np.ones((2, 30))
+side_by_side(binaria, cv.erode(binaria, kernel), title1='Original', title2=f'Kernel {kernel.shape}')
 
 
-# In[32]:
+# In[110]:
 
 
-lol = x.dtype
-
-
-# In[36]:
-
-
-x.dtype
-
-
-# In[39]:
-
-
-np.float
-
-
-# In[40]:
-
-
-x.dtype in [np.float, np.float32]
-
-
-# In[43]:
-
-
-e = 
-
-
-# In[44]:
-
-
-
+kernel = np.ones((70, 2))
+side_by_side(binaria, cv.erode(binaria, kernel), title1='Original', title2=f'Kernel {kernel.shape}')
 
 
 # In[ ]:
