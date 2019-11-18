@@ -19,10 +19,10 @@ import PIL as pil
 
 
 # User-defined functions, utils module found in the same directory as Erosion.ipynb
-from utils import binarise, side_by_side
+from utils import binarise, side_by_side, rescale_img, reverse
 
 
-# In[21]:
+# In[3]:
 
 
 def opening(src: np.ndarray, kernel: np.ndarray, iterations: int = 1) -> np.ndarray:
@@ -54,32 +54,32 @@ def closing(src: np.ndarray, kernel: np.ndarray, iterations: int = 1) -> np.ndar
 x = img.imread('imagenes/Im1T4.png')
 
 
-# In[5]:
+# In[12]:
 
 
 plt.imshow(x, cmap='gray')
 
 
-# In[6]:
+# In[13]:
 
 
-x = 1 - x
+x = reverse(x)
 
 
-# In[7]:
+# In[14]:
 
 
 plt.imshow(x, cmap='gray')
 
 
-# In[8]:
+# In[15]:
 
 
 binaria = binarise(x)
 plt.imshow(binaria, cmap='gray')
 
 
-# In[9]:
+# In[16]:
 
 
 help(opening)
@@ -87,42 +87,42 @@ help(opening)
 
 # # Opening
 
-# In[14]:
-
-
-kernel = np.ones((10, 10))
-side_by_side(binaria, opening(binaria, kernel), title1='Original', title2=f'opening() with Kernel {kernel.shape}')
-
-
-# In[15]:
-
-
-kernel = np.ones((10, 10))
-side_by_side(binaria, cv.morphologyEx(binaria, cv.MORPH_OPEN, kernel), title1='Original', title2=f'cv.MORPH_OPEN with Kernel {kernel.shape}')
-
-
 # In[17]:
 
 
-kernel = np.ones((2, 50))
+kernel = np.ones((10, 10))
 side_by_side(binaria, opening(binaria, kernel), title1='Original', title2=f'opening() with Kernel {kernel.shape}')
 
 
 # In[18]:
 
 
-kernel = np.ones((2, 50))
+kernel = np.ones((10, 10))
 side_by_side(binaria, cv.morphologyEx(binaria, cv.MORPH_OPEN, kernel), title1='Original', title2=f'cv.MORPH_OPEN with Kernel {kernel.shape}')
 
 
 # In[19]:
 
 
-kernel = np.ones((50, 2))
+kernel = np.ones((2, 50))
 side_by_side(binaria, opening(binaria, kernel), title1='Original', title2=f'opening() with Kernel {kernel.shape}')
 
 
 # In[20]:
+
+
+kernel = np.ones((2, 50))
+side_by_side(binaria, cv.morphologyEx(binaria, cv.MORPH_OPEN, kernel), title1='Original', title2=f'cv.MORPH_OPEN with Kernel {kernel.shape}')
+
+
+# In[21]:
+
+
+kernel = np.ones((50, 2))
+side_by_side(binaria, opening(binaria, kernel), title1='Original', title2=f'opening() with Kernel {kernel.shape}')
+
+
+# In[22]:
 
 
 kernel = np.ones((50, 2))
@@ -134,87 +134,88 @@ side_by_side(binaria, cv.morphologyEx(binaria, cv.MORPH_OPEN, kernel), title1='O
 
 # # Closing
 
-# In[22]:
-
-
-kernel = np.ones((10, 10))
-side_by_side(binaria, closing(binaria, kernel), title1='Original', title2=f'closing() with Kernel {kernel.shape}')
-
-
 # In[23]:
 
 
 kernel = np.ones((10, 10))
-side_by_side(binaria, cv.morphologyEx(binaria, cv.MORPH_CLOSE, kernel), title1='Original', title2=f'cv.MORPH_CLOSE with Kernel {kernel.shape}')
+side_by_side(binaria, closing(binaria, kernel), title1='Original', title2=f'closing() with Kernel {kernel.shape}')
 
 
 # In[24]:
 
 
-kernel = np.ones((2, 50))
-side_by_side(binaria, closing(binaria, kernel), title1='Original', title2=f'closing() with Kernel {kernel.shape}')
+kernel = np.ones((10, 10))
+side_by_side(binaria, cv.morphologyEx(binaria, cv.MORPH_CLOSE, kernel), title1='Original', title2=f'cv.MORPH_CLOSE with Kernel {kernel.shape}')
 
 
 # In[25]:
 
 
 kernel = np.ones((2, 50))
-side_by_side(binaria, cv.morphologyEx(binaria, cv.MORPH_CLOSE, kernel), title1='Original', title2=f'cv.MORPH_CLOSE with Kernel {kernel.shape}')
+side_by_side(binaria, closing(binaria, kernel), title1='Original', title2=f'closing() with Kernel {kernel.shape}')
 
 
 # In[26]:
 
 
-kernel = np.ones((50, 2))
-side_by_side(binaria, closing(binaria, kernel), title1='Original', title2=f'closing() with Kernel {kernel.shape}')
+kernel = np.ones((2, 50))
+side_by_side(binaria, cv.morphologyEx(binaria, cv.MORPH_CLOSE, kernel), title1='Original', title2=f'cv.MORPH_CLOSE with Kernel {kernel.shape}')
 
 
 # In[27]:
 
 
 kernel = np.ones((50, 2))
+side_by_side(binaria, closing(binaria, kernel), title1='Original', title2=f'closing() with Kernel {kernel.shape}')
+
+
+# In[28]:
+
+
+kernel = np.ones((50, 2))
 side_by_side(binaria, cv.morphologyEx(binaria, cv.MORPH_CLOSE, kernel), title1='Original', title2=f'cv.MORPH_CLOSE with Kernel {kernel.shape}')
 
 
-# As Gonzalez explained on the book, the opening operation is nothing but a dilation followed by an erosion.
+# As Gonzalez explained in the book, the closing operation is nothing but a dilation followed by an erosion.
 # Our custom function ```closing(image, kernel)``` yields the same result as executing ```cv.morphologyEx(image, cv.MORPH_CLOSE, kernel)```
 
 # # Example found on page 643
 
-# In[32]:
+# In[30]:
 
 
-figura = cv.imread('imagenes/figura.png', 0)
-figura.shape
+figura = cv.imread('imagenes/figura.png', 0) / 255.0
+figura = reverse(figura)
+figura.shape, figura.dtype
 
 
-# In[34]:
+# In[31]:
 
 
 plt.imshow(figura, cmap='gray')
 
 
-# In[36]:
+# In[32]:
 
 
 figura2 = binarise(figura)
 plt.imshow(figura2, cmap='gray')
 
 
-# In[62]:
+# In[35]:
 
 
-kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (25, 25))
+kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (20, 20))
 side_by_side(figura2, cv.morphologyEx(figura2, cv.MORPH_OPEN ,kernel), title1='Original', title2=f'OPEN : Kernel {kernel.shape}')
 
 
-# In[63]:
+# In[36]:
 
 
 side_by_side(figura2, cv.morphologyEx(figura2, cv.MORPH_CLOSE ,kernel), title1='Original', title2=f'CLOSE : Kernel {kernel.shape}')
 
 
-# In[77]:
+# In[37]:
 
 
 plt.figure(figsize=(15,10))
@@ -222,7 +223,7 @@ plt.imshow(cv.imread('imagenes/opening.png'))
 plt.title('Opening, acording to Gonzalez', size = 18)
 
 
-# In[76]:
+# In[38]:
 
 
 plt.figure(figsize=(15,10))

@@ -64,6 +64,18 @@ def binarise(src: np.ndarray, threshold: Optional[float] = None) -> np.ndarray:
     return dst
 ##
 
+def rescale_img(src: np.ndarray) -> np.ndarray:
+    """
+    """
+    return src / 255.0
+##
+
+def reverse(src: np.ndarray) -> np.ndarray:
+    """
+    """
+    return 1.0 - src
+
+
 def side_by_side(
     image1: np.ndarray, 
     image2: np.ndarray, 
