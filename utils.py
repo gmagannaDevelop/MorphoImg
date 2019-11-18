@@ -11,7 +11,36 @@ import PIL as pil
 
 def binarise(src: np.ndarray, threshold: Optional[float] = None) -> np.ndarray:
     """
-        Take a grayscale image anf
+        Take a grayscale image of any range : 
+            [0.0, 1.0]  (float)
+            [0, 255]    (int)
+
+        And binarise it, specifying a threshold or using the 
+        image intensity mean value as default.
+
+        The binarisation occurs as follows
+
+        pixels_intensity >= threshold --> _max
+        pixels_intensity <  threshold --> _min
+
+        '_min' and '_max' are inferred from the source image's dtype
+
+        dtype ~ float :
+            _min = 0.0
+            _max = 1.0
+
+        dtype ~ int :
+            _min = 0
+            _max = 255
+        
+        Arguments:
+                  src : A grayscale image, of type numpy.ndarray
+            threshold : An optional value to specify the 
+                        'cutoff' intensity value.
+                        Defaults to mean intensity value.
+
+        Returns : 
+                  dst : A binary image, of type numpy.ndarray
     """
     dst = src.copy()
     
@@ -44,6 +73,11 @@ def side_by_side(
     **kw
 ) -> NoReturn: 
     """
+        Show two matplotlib.pyplot.imshow images, side by side.
+        
+        Optional arguments : 
+            Title for each subplot.
+            Figsize, specified as a tuple.
     """
     
     fig = plt.figure(figsize = _figsize)
