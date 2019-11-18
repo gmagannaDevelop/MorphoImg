@@ -46,36 +46,85 @@ x = 1 - x
 plt.imshow(x, cmap='gray')
 
 
-# In[9]:
+# In[7]:
 
 
 binaria = binarise(x)
 plt.imshow(binaria, cmap='gray')
 
 
-# In[10]:
+# In[8]:
 
 
 help(cv.erode)
 
 
-# In[11]:
+# In[9]:
 
 
 kernel = np.ones((10, 10))
 side_by_side(binaria, cv.erode(binaria, kernel), title1='Original', title2=f'Kernel {kernel.shape}')
 
 
-# In[12]:
+# In[10]:
 
 
 kernel = np.ones((2, 30))
 side_by_side(binaria, cv.erode(binaria, kernel), title1='Original', title2=f'Kernel {kernel.shape}')
 
 
-# In[13]:
+# In[11]:
 
 
 kernel = np.ones((70, 2))
 side_by_side(binaria, cv.erode(binaria, kernel), title1='Original', title2=f'Kernel {kernel.shape}')
+
+
+# # Example found on page 641
+
+# In[20]:
+
+
+wbm = cv.imread('imagenes/wire_bond_mask.png', 0)
+wbm.shape
+
+
+# In[21]:
+
+
+plt.imshow(wbm, cmap='gray')
+
+
+# In[22]:
+
+
+wbm = binarise(wbm)
+plt.imshow(wbm, cmap='gray')
+
+
+# In[24]:
+
+
+kernel = np.ones((11, 11))
+side_by_side(wbm, cv.erode(wbm, kernel), title1='Original', title2=f'Kernel {kernel.shape}')
+
+
+# In[25]:
+
+
+kernel = np.ones((15, 15))
+side_by_side(wbm, cv.erode(wbm, kernel), title1='Original', title2=f'Kernel {kernel.shape}')
+
+
+# In[26]:
+
+
+kernel = np.ones((45, 45))
+side_by_side(wbm, cv.erode(wbm, kernel), title1='Original', title2=f'Kernel {kernel.shape}')
+
+
+# In[ ]:
+
+
+
 
