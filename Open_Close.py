@@ -231,8 +231,7 @@ plt.imshow(cv.imread('imagenes/closing.png'))
 plt.title('Closing, acording to Gonzalez', size = 18)
 
 
-# Is Gonzalez wrong or is there a bug in OpenCV ?
-# Closing and opening seem to be the oposite of what is shown here.
+# 
 
 # In[ ]:
 
