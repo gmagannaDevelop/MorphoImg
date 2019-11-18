@@ -17,11 +17,11 @@ import PIL as pil
 import importlib
 
 
-# In[2]:
+# In[5]:
 
 
 # User-defined functions, utils module found in the same directory as Erosion.ipynb
-from utils import binarise, side_by_side, rescale_img, reverse, structuring_circle
+from utils import binarise, side_by_side, rescale_img, reverse, structuring_circle, opening, closing
 
 
 # In[3]:
@@ -31,32 +31,6 @@ from utils import binarise, side_by_side, rescale_img, reverse, structuring_circ
 import mfilt_funcs as mine
 importlib.reload(mine)
 from mfilt_funcs import *
-
-
-# In[4]:
-
-
-def opening(src: np.ndarray, kernel: np.ndarray, iterations: int = 1) -> np.ndarray:
-    """
-        As defined in pages 644 and 645 :
-            'The opening A by B is the erosion of A by B, followed by a dilation of the result by B'
-        
-        This function is should be equivalent to :
-            cv.morphologyEx(img, cv.MORPH_OPEN, kernel)
-    """
-    return cv.dilate(cv.erode(src, kernel, iterations=iterations), kernel, iterations=iterations)
-##
-
-def closing(src: np.ndarray, kernel: np.ndarray, iterations: int = 1) -> np.ndarray:
-    """
-        As defined in pages 644 and 6 45 :
-            'The closing of A by B is simply the dilation of A by B, followed by erosion of the result by B.'
-        
-        This function is should be equivalent to :
-            cv.morphologyEx(img, cv.MORPH_CLOSE, kernel)
-    """
-    return cv.erode(cv.dilate(src, kernel, iterations=iterations), kernel, iterations=iterations)
-##
 
 
 # In[5]:
@@ -325,124 +299,27 @@ plt.close('all')
 
 # It seems that OpenCV's implementation of the ellyptical/circular structuring element is kind of poor, i.e. its lack of precision breaks the idempotence property of Opening. 
 # Creating a better structuring element (i.e. having it to be symmetrical at least) will result in idempotence being respected.
+# 
+# That's why I created ```structuring_circle()``` found in ```.utils.py``` which gives a decent circle mask.
 
-# In[162]:
-
-
-def structuring_circle(radius: int, size: Optional[int] = None):
-    ''' 
-        size : size of original 3D numpy matrix A.
-        radius : radius of circle inside A which will be filled with ones.
-        
-        Inspired from : 
-            https://stackoverflow.com/questions/53326570/how-to-create-sphere-inside-a-ndarray-python
-    '''
-    if size:
-        assert size >= 2*radius, 'Circle overflows matrix surface !'
-        assert size % 2 == 0, 'Size must be even !'
-    else:
-        size = 2*radius
-        
-    A = np.zeros((size+1, size+1))
-    AA = A.copy() 
-    D = AA.copy()
-    
-    ''' (x0, y0) : coordinates of center of circle inside A. '''
-    x0, y0 = int(np.floor(A.shape[0]/2)), int(np.floor(A.shape[1]/2))
+# In[7]:
 
 
-    for x in range(x0-radius, x0+radius+1):
-        for y in range(y0-radius, y0+radius+1):
-            ''' deb: measures how far a coordinate in A is far from the center. 
-                deb>=0: inside the sphere.
-                deb<0: outside the sphere.'''   
-            deb = radius - abs(x0-x) - abs(y0-y) 
-            D[x, y] = deb
-            if (deb)>=0: AA[x,y] = 1
-    
-    AA = np.uint8(AA)
-    
-    return AA
+fing = cv.imread('imagenes/fingerprint.png', 0) / 255
+fing.shape, fing.dtype
 
 
-# In[166]:
+# In[9]:
 
 
-struc = structuring_circle(radius=4)
-side_by_side(cv.getStructuringElement(cv.MORPH_ELLIPSE, (5, 5)), struc)
+plt.imshow(fing, cmap='gray')
 
 
-# In[95]:
+# In[13]:
 
 
-struc[0, :]
-
-
-# In[96]:
-
-
-side_by_side(struc, np.rot90(struc))
-
-
-# In[97]:
-
-
-plt.imshow(dist)
-
-
-# In[39]:
-
-
-dist
-
-
-# In[44]:
-
-
-_x = (-4., -3., -2., -1.,  0.,  1.,  0., -1., -2., -3.)
-
-
-# In[43]:
-
-
-len((-3., -2., -1.,  0.,  1.,  2.,  1.,  0., -1., -2.))
-
-
-# In[46]:
-
-
-_x[int(np.floor(10/2))]
-
-
-# In[68]:
-
-
-_x = np.array(range(10))
-_x
-
-
-# In[116]:
-
-
-struc.dtype
-
-
-# In[122]:
-
-
-cv.getStructuringElement(cv.MORPH_RECT, (4,4))
-
-
-# In[ ]:
-
-
-kernel.dtype = np.int8
-
-
-# In[134]:
-
-
-np.int(3.45)
+kernel = structuring_circle(radius=2)
+side_by_side(fing, closing(opening(fing, kernel), kernel))
 
 
 # In[ ]:

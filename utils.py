@@ -139,3 +139,28 @@ def structuring_circle(radius: int, size: Optional[int] = None):
     
     return AA
 ##
+
+def opening(src: np.ndarray, kernel: np.ndarray, iterations: int = 1) -> np.ndarray:
+    """
+        As defined in pages 644 and 645 :
+            'The opening A by B is the erosion of A by B, 
+            followed by a dilation of the result by B'
+        
+        This function is should be equivalent to :
+            cv.morphologyEx(img, cv.MORPH_OPEN, kernel)
+    """
+    return cv.dilate(cv.erode(src, kernel, iterations=iterations), kernel, iterations=iterations)
+##
+
+def closing(src: np.ndarray, kernel: np.ndarray, iterations: int = 1) -> np.ndarray:
+    """
+        As defined in pages 644 and 6 45 :
+            'The closing of A by B is simply the dilation of A by B, 
+            followed by erosion of the result by B.'
+        
+        This function is should be equivalent to :
+            cv.morphologyEx(img, cv.MORPH_CLOSE, kernel)
+    """
+    return cv.erode(cv.dilate(src, kernel, iterations=iterations), kernel, iterations=iterations)
+##
+
