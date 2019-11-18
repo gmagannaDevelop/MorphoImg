@@ -21,7 +21,7 @@ import importlib
 
 
 # User-defined functions, utils module found in the same directory as Erosion.ipynb
-from utils import binarise, side_by_side, rescale_img, reverse
+from utils import binarise, side_by_side, rescale_img, reverse, structuring_circle
 
 
 # In[3]:
