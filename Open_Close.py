@@ -322,7 +322,7 @@ plt.close('all')
 # In[87]:
 
 
-def structuring_circle(size: int, radius: int):
+def structuring_circle(radius: int, size: Optional[int] = None):
     ''' 
         size : size of original 3D numpy matrix A.
         radius : radius of circle inside A which will be filled with ones.
@@ -330,6 +330,7 @@ def structuring_circle(size: int, radius: int):
         Inspired from : 
             https://stackoverflow.com/questions/53326570/how-to-create-sphere-inside-a-ndarray-python
     '''
+    
 
     assert size >= 2*radius, 'Circle overflows matrix surface !'
 
@@ -354,10 +355,10 @@ def structuring_circle(size: int, radius: int):
     return AA, D
 
 
-# In[88]:
+# In[90]:
 
 
-struc, dist = structuring_circle(size=12, radius=6)
+struc, dist = structuring_circle(size=8, radius=4)
 side_by_side(cv.getStructuringElement(cv.MORPH_ELLIPSE, (5, 5)), struc)
 
 
