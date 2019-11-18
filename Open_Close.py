@@ -233,11 +233,80 @@ plt.title('Closing, acording to Gonzalez', size = 18)
 
 # 
 
-# In[ ]:
+# # Idempotence property
+# 
+# 1. $$ (A \circ B) \circ B = A \circ B $$
+# 
+# Through induction, one arrives to the conclusion that this operation can be repeated indefinitely and the result will always be the same as one opening.
+
+# In[105]:
 
 
+kernel = cv.getStructuringElement(cv.MORPH_RECT, (5, 5))
+kernel
 
 
+# In[79]:
+
+
+idemPot = figura2.copy()
+for i in range(50):
+    idemPot = cv.morphologyEx(idemPot, cv.MORPH_OPEN, kernel)
+    side_by_side(figura2, idemPot, title1='Original', title2=f'OPEN : Kernel {kernel.shape}, iter = {i+1}')
+
+
+# In[118]:
+
+
+plt.close('all')
+
+
+# In[108]:
+
+
+kernel = cv.getStructuringElement(cv.MORPH_CROSS, (15, 15))
+kernel
+
+
+# In[110]:
+
+
+idemPot = figura2.copy()
+for i in range(50):
+    idemPot = cv.morphologyEx(idemPot, cv.MORPH_OPEN, kernel)
+    side_by_side(figura2, idemPot, title1='Original', title2=f'OPEN : Kernel {kernel.shape}, iter = {i+1}')
+
+
+# In[117]:
+
+
+plt.close('all')
+
+
+# In[115]:
+
+
+kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (12, 12))
+kernel
+
+
+# In[116]:
+
+
+idemPot = figura2.copy()
+for i in range(50):
+    idemPot = cv.morphologyEx(idemPot, cv.MORPH_OPEN, kernel)
+    side_by_side(figura2, idemPot, title1='Original', title2=f'OPEN : Kernel {kernel.shape}, iter = {i+1}')
+
+
+# In[109]:
+
+
+plt.close('all')
+
+
+# It seems that OpenCV's implementation of the ellyptical/circular structuring element is kind of poor, i.e. its lack of precision breaks the idempotence property of Opening. 
+# Creating a better structuring element (i.e. having it to be symmetrical at least) will result in idempotence being respected.
 
 # In[ ]:
 
