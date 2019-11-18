@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[194]:
+# In[1]:
 
 
 from typing import Optional, Callable, Tuple, List, NoReturn
@@ -24,7 +24,7 @@ import importlib
 from utils import binarise, side_by_side, rescale_img, reverse
 
 
-# In[195]:
+# In[3]:
 
 
 # Importamos todas nuestras funciones:
@@ -33,7 +33,7 @@ importlib.reload(mine)
 from mfilt_funcs import *
 
 
-# In[3]:
+# In[4]:
 
 
 def opening(src: np.ndarray, kernel: np.ndarray, iterations: int = 1) -> np.ndarray:
@@ -59,38 +59,38 @@ def closing(src: np.ndarray, kernel: np.ndarray, iterations: int = 1) -> np.ndar
 ##
 
 
-# In[4]:
+# In[5]:
 
 
 x = img.imread('imagenes/Im1T4.png')
 
 
-# In[12]:
+# In[6]:
 
 
 plt.imshow(x, cmap='gray')
 
 
-# In[13]:
+# In[7]:
 
 
 x = reverse(x)
 
 
-# In[14]:
+# In[8]:
 
 
 plt.imshow(x, cmap='gray')
 
 
-# In[15]:
+# In[9]:
 
 
 binaria = binarise(x)
 plt.imshow(binaria, cmap='gray')
 
 
-# In[16]:
+# In[10]:
 
 
 help(opening)
@@ -98,42 +98,42 @@ help(opening)
 
 # # Opening
 
-# In[17]:
+# In[11]:
 
 
 kernel = np.ones((10, 10))
 side_by_side(binaria, opening(binaria, kernel), title1='Original', title2=f'opening() with Kernel {kernel.shape}')
 
 
-# In[18]:
+# In[12]:
 
 
 kernel = np.ones((10, 10))
 side_by_side(binaria, cv.morphologyEx(binaria, cv.MORPH_OPEN, kernel), title1='Original', title2=f'cv.MORPH_OPEN with Kernel {kernel.shape}')
 
 
-# In[19]:
+# In[13]:
 
 
 kernel = np.ones((2, 50))
 side_by_side(binaria, opening(binaria, kernel), title1='Original', title2=f'opening() with Kernel {kernel.shape}')
 
 
-# In[20]:
+# In[14]:
 
 
 kernel = np.ones((2, 50))
 side_by_side(binaria, cv.morphologyEx(binaria, cv.MORPH_OPEN, kernel), title1='Original', title2=f'cv.MORPH_OPEN with Kernel {kernel.shape}')
 
 
-# In[21]:
+# In[15]:
 
 
 kernel = np.ones((50, 2))
 side_by_side(binaria, opening(binaria, kernel), title1='Original', title2=f'opening() with Kernel {kernel.shape}')
 
 
-# In[22]:
+# In[16]:
 
 
 kernel = np.ones((50, 2))
@@ -145,42 +145,42 @@ side_by_side(binaria, cv.morphologyEx(binaria, cv.MORPH_OPEN, kernel), title1='O
 
 # # Closing
 
-# In[23]:
+# In[17]:
 
 
 kernel = np.ones((10, 10))
 side_by_side(binaria, closing(binaria, kernel), title1='Original', title2=f'closing() with Kernel {kernel.shape}')
 
 
-# In[24]:
+# In[18]:
 
 
 kernel = np.ones((10, 10))
 side_by_side(binaria, cv.morphologyEx(binaria, cv.MORPH_CLOSE, kernel), title1='Original', title2=f'cv.MORPH_CLOSE with Kernel {kernel.shape}')
 
 
-# In[25]:
+# In[19]:
 
 
 kernel = np.ones((2, 50))
 side_by_side(binaria, closing(binaria, kernel), title1='Original', title2=f'closing() with Kernel {kernel.shape}')
 
 
-# In[26]:
+# In[20]:
 
 
 kernel = np.ones((2, 50))
 side_by_side(binaria, cv.morphologyEx(binaria, cv.MORPH_CLOSE, kernel), title1='Original', title2=f'cv.MORPH_CLOSE with Kernel {kernel.shape}')
 
 
-# In[27]:
+# In[21]:
 
 
 kernel = np.ones((50, 2))
 side_by_side(binaria, closing(binaria, kernel), title1='Original', title2=f'closing() with Kernel {kernel.shape}')
 
 
-# In[28]:
+# In[22]:
 
 
 kernel = np.ones((50, 2))
@@ -192,7 +192,7 @@ side_by_side(binaria, cv.morphologyEx(binaria, cv.MORPH_CLOSE, kernel), title1='
 
 # # Example found on page 643
 
-# In[30]:
+# In[23]:
 
 
 figura = cv.imread('imagenes/figura.png', 0) / 255.0
@@ -200,33 +200,33 @@ figura = reverse(figura)
 figura.shape, figura.dtype
 
 
-# In[31]:
+# In[24]:
 
 
 plt.imshow(figura, cmap='gray')
 
 
-# In[32]:
+# In[25]:
 
 
 figura2 = binarise(figura)
 plt.imshow(figura2, cmap='gray')
 
 
-# In[35]:
+# In[26]:
 
 
 kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (20, 20))
 side_by_side(figura2, cv.morphologyEx(figura2, cv.MORPH_OPEN ,kernel), title1='Original', title2=f'OPEN : Kernel {kernel.shape}')
 
 
-# In[36]:
+# In[27]:
 
 
 side_by_side(figura2, cv.morphologyEx(figura2, cv.MORPH_CLOSE ,kernel), title1='Original', title2=f'CLOSE : Kernel {kernel.shape}')
 
 
-# In[37]:
+# In[28]:
 
 
 plt.figure(figsize=(15,10))
@@ -234,7 +234,7 @@ plt.imshow(cv.imread('imagenes/opening.png'))
 plt.title('Opening, acording to Gonzalez', size = 18)
 
 
-# In[38]:
+# In[29]:
 
 
 plt.figure(figsize=(15,10))
@@ -250,14 +250,14 @@ plt.title('Closing, acording to Gonzalez', size = 18)
 # 
 # Through induction, one arrives to the conclusion that this operation can be repeated indefinitely and the result will always be the same as one opening.
 
-# In[105]:
+# In[30]:
 
 
 kernel = cv.getStructuringElement(cv.MORPH_RECT, (5, 5))
 kernel
 
 
-# In[79]:
+# In[31]:
 
 
 idemPot = figura2.copy()
@@ -288,20 +288,20 @@ for i in range(50):
     side_by_side(figura2, idemPot, title1='Original', title2=f'OPEN : Kernel {kernel.shape}, iter = {i+1}')
 
 
-# In[117]:
+# In[32]:
 
 
 plt.close('all')
 
 
-# In[115]:
+# In[33]:
 
 
 kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (12, 12))
 kernel
 
 
-# In[116]:
+# In[34]:
 
 
 idemPot = figura2.copy()
@@ -310,7 +310,7 @@ for i in range(50):
     side_by_side(figura2, idemPot, title1='Original', title2=f'OPEN : Kernel {kernel.shape}, iter = {i+1}')
 
 
-# In[109]:
+# In[35]:
 
 
 plt.close('all')
@@ -319,7 +319,7 @@ plt.close('all')
 # It seems that OpenCV's implementation of the ellyptical/circular structuring element is kind of poor, i.e. its lack of precision breaks the idempotence property of Opening. 
 # Creating a better structuring element (i.e. having it to be symmetrical at least) will result in idempotence being respected.
 
-# In[200]:
+# In[87]:
 
 
 def structuring_circle(size: int, radius: int):
@@ -333,7 +333,7 @@ def structuring_circle(size: int, radius: int):
 
     assert size >= 2*radius, 'Circle overflows matrix surface !'
 
-    A = np.zeros((size, size)) 
+    A = np.zeros((size+1, size+1)) 
     AA = A.copy() 
     D = AA.copy()
     
@@ -341,35 +341,79 @@ def structuring_circle(size: int, radius: int):
     x0, y0 = int(np.floor(A.shape[0]/2)), int(np.floor(A.shape[1]/2))
 
 
-    for x in range(x0-radius, x0+radius):
-        for y in range(y0-radius, y0+radius):
+    for x in range(x0-radius, x0+radius+1):
+        for y in range(y0-radius, y0+radius+1):
             ''' deb: measures how far a coordinate in A is far from the center. 
                 deb>=0: inside the sphere.
                 deb<0: outside the sphere.'''   
-            deb = radius - abs(x0-x) - abs(y0-y)
+            deb = radius - abs(x0-x) - abs(y0-y) 
             D[x, y] = deb
             if (deb)>=0: AA[x,y] = 1
-                
+    
+    
     return AA, D
 
 
-# In[201]:
+# In[88]:
 
 
-struc, dist = structuring_circle(size=10, radius=5)
+struc, dist = structuring_circle(size=12, radius=6)
 side_by_side(cv.getStructuringElement(cv.MORPH_ELLIPSE, (5, 5)), struc)
 
 
-# In[197]:
+# In[84]:
+
+
+struc[0, :]
+
+
+# In[81]:
+
+
+side_by_side(struc, np.rot90(struc))
+
+
+# In[38]:
 
 
 plt.imshow(dist)
 
 
-# In[198]:
+# In[39]:
 
 
 dist
+
+
+# In[44]:
+
+
+_x = (-4., -3., -2., -1.,  0.,  1.,  0., -1., -2., -3.)
+
+
+# In[43]:
+
+
+len((-3., -2., -1.,  0.,  1.,  2.,  1.,  0., -1., -2.))
+
+
+# In[46]:
+
+
+_x[int(np.floor(10/2))]
+
+
+# In[68]:
+
+
+_x = np.array(range(10))
+_x
+
+
+# In[71]:
+
+
+1:4
 
 
 # In[ ]:
