@@ -48,12 +48,12 @@ def side_by_side(
     
     fig = plt.figure(figsize = _figsize)
     
-    fig.add_subplot(2, 1, 1)
+    fig.add_subplot(1, 2, 1)
     plt.imshow(image1, cmap = 'gray')
     if title1:
         plt.title(title1, size = 18)
     
-    fig.add_subplot(2, 1, 2)
+    fig.add_subplot(1, 2, 2)
     plt.imshow(image2, cmap = 'gray')
     if title2:
         plt.title(title2, size = 18)
