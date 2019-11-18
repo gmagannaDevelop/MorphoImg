@@ -294,14 +294,21 @@ for i in range(50):
 plt.close('all')
 
 
-# In[33]:
+# In[156]:
 
 
-kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (12, 12))
-kernel
+#kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (12, 12))
+kernel = structuring_circle(radius=12)
+#kernel
 
 
-# In[34]:
+# In[157]:
+
+
+#side_by_side(figura2, opening(figura2, kernel), title1='Original', title2=f'OPEN : Kernel {kernel.shape}, iter = {i+1}')
+
+
+# In[158]:
 
 
 idemPot = figura2.copy()
@@ -310,7 +317,7 @@ for i in range(50):
     side_by_side(figura2, idemPot, title1='Original', title2=f'OPEN : Kernel {kernel.shape}, iter = {i+1}')
 
 
-# In[35]:
+# In[149]:
 
 
 plt.close('all')
@@ -319,7 +326,7 @@ plt.close('all')
 # It seems that OpenCV's implementation of the ellyptical/circular structuring element is kind of poor, i.e. its lack of precision breaks the idempotence property of Opening. 
 # Creating a better structuring element (i.e. having it to be symmetrical at least) will result in idempotence being respected.
 
-# In[87]:
+# In[162]:
 
 
 def structuring_circle(radius: int, size: Optional[int] = None):
@@ -330,11 +337,13 @@ def structuring_circle(radius: int, size: Optional[int] = None):
         Inspired from : 
             https://stackoverflow.com/questions/53326570/how-to-create-sphere-inside-a-ndarray-python
     '''
-    
-
-    assert size >= 2*radius, 'Circle overflows matrix surface !'
-
-    A = np.zeros((size+1, size+1)) 
+    if size:
+        assert size >= 2*radius, 'Circle overflows matrix surface !'
+        assert size % 2 == 0, 'Size must be even !'
+    else:
+        size = 2*radius
+        
+    A = np.zeros((size+1, size+1))
     AA = A.copy() 
     D = AA.copy()
     
@@ -351,30 +360,31 @@ def structuring_circle(radius: int, size: Optional[int] = None):
             D[x, y] = deb
             if (deb)>=0: AA[x,y] = 1
     
+    AA = np.uint8(AA)
     
-    return AA, D
+    return AA
 
 
-# In[90]:
+# In[166]:
 
 
-struc, dist = structuring_circle(size=8, radius=4)
+struc = structuring_circle(radius=4)
 side_by_side(cv.getStructuringElement(cv.MORPH_ELLIPSE, (5, 5)), struc)
 
 
-# In[84]:
+# In[95]:
 
 
 struc[0, :]
 
 
-# In[81]:
+# In[96]:
 
 
 side_by_side(struc, np.rot90(struc))
 
 
-# In[38]:
+# In[97]:
 
 
 plt.imshow(dist)
@@ -411,10 +421,28 @@ _x = np.array(range(10))
 _x
 
 
-# In[71]:
+# In[116]:
 
 
-1:4
+struc.dtype
+
+
+# In[122]:
+
+
+cv.getStructuringElement(cv.MORPH_RECT, (4,4))
+
+
+# In[ ]:
+
+
+kernel.dtype = np.int8
+
+
+# In[134]:
+
+
+np.int(3.45)
 
 
 # In[ ]:

@@ -105,4 +105,37 @@ def side_by_side(
         plt.title(title2, size = 18)
 ##
 
+def structuring_circle(radius: int, size: Optional[int] = None):
+    ''' 
+        radius : Radius of circle inside the 2D ndarray which will be filled with ones.
+        size   : Optional size of the rectangle 2D ndarray which will contain the circle. 
+        Inspired from : 
+            https://stackoverflow.com/questions/53326570/how-to-create-sphere-inside-a-ndarray-python
+    '''
+    if size:
+        assert size >= 2*radius, 'Circle overflows matrix surface !'
+        assert size % 2 == 0, 'Size must be even !'
+    else:
+        size = 2*radius
+        
+    A = np.zeros((size+1, size+1))
+    AA = A.copy() 
+    D = AA.copy()
+    
+    ''' (x0, y0) : coordinates of center of circle inside A. '''
+    x0, y0 = int(np.floor(A.shape[0]/2)), int(np.floor(A.shape[1]/2))
 
+
+    for x in range(x0-radius, x0+radius+1):
+        for y in range(y0-radius, y0+radius+1):
+            ''' deb: measures how far a coordinate in A is far from the center. 
+                deb>=0: inside the sphere.
+                deb<0: outside the sphere.'''   
+            deb = radius - abs(x0-x) - abs(y0-y) 
+            D[x, y] = deb
+            if (deb)>=0: AA[x,y] = 1
+    
+    AA = np.uint8(AA)
+    
+    return AA
+##
