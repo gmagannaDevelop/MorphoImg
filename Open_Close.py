@@ -181,45 +181,62 @@ side_by_side(binaria, cv.morphologyEx(binaria, cv.MORPH_CLOSE, kernel), title1='
 
 # # Example found on page 643
 
-# In[18]:
+# In[32]:
 
 
-text = cv.imread('imagenes/text.png', 0)
-text.shape
+figura = cv.imread('imagenes/figura.png', 0)
+figura.shape
 
 
-# In[19]:
+# In[34]:
 
 
-plt.imshow(text, cmap='gray')
+plt.imshow(figura, cmap='gray')
 
 
-# In[31]:
+# In[36]:
 
 
-text2 = binarise(text, threshold=115)
-plt.imshow(text2, cmap='gray')
+figura2 = binarise(figura)
+plt.imshow(figura2, cmap='gray')
 
 
-# In[37]:
+# In[62]:
 
 
-kernel = np.ones((1, 1))
-side_by_side(text2, cv.dilate(text2, kernel), title1='Original', title2=f'Kernel {kernel.shape}')
+kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (25, 25))
+side_by_side(figura2, cv.morphologyEx(figura2, cv.MORPH_OPEN ,kernel), title1='Original', title2=f'OPEN : Kernel {kernel.shape}')
 
 
-# In[43]:
+# In[63]:
 
 
-kernel = np.ones((3, 3))
-side_by_side(text2[400:, 400:], cv.dilate(text2[400:, 400:], kernel), title1='Original', title2=f'Kernel {kernel.shape}')
+side_by_side(figura2, cv.morphologyEx(figura2, cv.MORPH_CLOSE ,kernel), title1='Original', title2=f'CLOSE : Kernel {kernel.shape}')
 
 
-# In[41]:
+# In[77]:
 
 
-kernel = np.ones((15, 15))
-side_by_side(text2, cv.dilate(text2, kernel), title1='Original', title2=f'Kernel {kernel.shape}')
+plt.figure(figsize=(15,10))
+plt.imshow(cv.imread('imagenes/opening.png'))
+plt.title('Opening, acording to Gonzalez', size = 18)
+
+
+# In[76]:
+
+
+plt.figure(figsize=(15,10))
+plt.imshow(cv.imread('imagenes/closing.png'))
+plt.title('Closing, acording to Gonzalez', size = 18)
+
+
+# Is Gonzalez wrong or is there a bug in OpenCV ?
+# Closing and opening seem to be the oposite of what is shown here.
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:
