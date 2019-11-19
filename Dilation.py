@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[31]:
 
 
 from typing import Optional, Callable, Tuple, List, NoReturn
-from functools import partial
+from functools import partial, reduce
 
 import matplotlib.pyplot as plt
 import matplotlib.image as img
@@ -53,27 +53,27 @@ binaria = binarise(x)
 plt.imshow(binaria, cmap='gray')
 
 
-# In[9]:
+# In[8]:
 
 
 help(cv.dilate)
 
 
-# In[10]:
+# In[9]:
 
 
 kernel = np.ones((10, 10))
 side_by_side(binaria, cv.dilate(binaria, kernel), title1='Original', title2=f'Kernel {kernel.shape}')
 
 
-# In[13]:
+# In[10]:
 
 
 kernel = np.ones((2, 50))
 side_by_side(binaria, cv.dilate(binaria, kernel), title1='Original', title2=f'Kernel {kernel.shape}')
 
 
-# In[14]:
+# In[11]:
 
 
 kernel = np.ones((50, 2))
@@ -82,41 +82,41 @@ side_by_side(binaria, cv.dilate(binaria, kernel), title1='Original', title2=f'Ke
 
 # # Example found on page 643
 
-# In[18]:
+# In[12]:
 
 
 text = cv.imread('imagenes/text.png', 0)
 text.shape
 
 
-# In[19]:
+# In[13]:
 
 
 plt.imshow(text, cmap='gray')
 
 
-# In[31]:
+# In[14]:
 
 
 text2 = binarise(text, threshold=115)
 plt.imshow(text2, cmap='gray')
 
 
-# In[37]:
+# In[15]:
 
 
 kernel = np.ones((1, 1))
 side_by_side(text2, cv.dilate(text2, kernel), title1='Original', title2=f'Kernel {kernel.shape}')
 
 
-# In[43]:
+# In[16]:
 
 
 kernel = np.ones((3, 3))
 side_by_side(text2[400:, 400:], cv.dilate(text2[400:, 400:], kernel), title1='Original', title2=f'Kernel {kernel.shape}')
 
 
-# In[41]:
+# In[17]:
 
 
 kernel = np.ones((15, 15))
@@ -127,4 +127,49 @@ side_by_side(text2, cv.dilate(text2, kernel), title1='Original', title2=f'Kernel
 
 
 
+
+
+# In[43]:
+
+
+A = np.zeros((11, 11))
+A[5, 5] = 1
+plt.grid()
+plt.imshow(A, cmap='gray')
+
+
+# In[42]:
+
+
+B = [A, np.ones((3, 1)), np.ones((1, 3))]
+dilate_decomposed = reduce(lambda x, y: cv.dilate(x, y), B)
+plt.grid()
+plt.imshow(dilate_decomposed, cmap='gray')
+
+
+# In[49]:
+
+
+y = np.array([1, 1, 0, 0, 1, 1, 0, 1, 0])
+y.shape = 3, 3
+y = np.uint8(y)
+y
+
+
+# In[52]:
+
+
+side_by_side(A, cv.dilate(A, y))
+
+
+# In[40]:
+
+
+np.ones((3, 1))
+
+
+# In[ ]:
+
+
+reverse
 
