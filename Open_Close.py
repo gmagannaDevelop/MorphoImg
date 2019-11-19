@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[23]:
 
 
 from typing import Optional, Callable, Tuple, List, NoReturn
-from functools import partial
+from functools import partial, reduce
 
 import matplotlib.pyplot as plt
 import matplotlib.image as img
@@ -17,14 +17,16 @@ import PIL as pil
 import importlib
 
 
-# In[5]:
+# In[4]:
 
 
 # User-defined functions, utils module found in the same directory as Erosion.ipynb
+import utils as utils
+importlib.reload(utils)
 from utils import binarise, side_by_side, rescale_img, reverse, structuring_circle, opening, closing
 
 
-# In[3]:
+# In[5]:
 
 
 # Importamos todas nuestras funciones:
@@ -302,28 +304,120 @@ plt.close('all')
 # 
 # That's why I created ```structuring_circle()``` found in ```.utils.py``` which gives a decent circle mask.
 
-# In[7]:
+# In[10]:
 
 
 fing = cv.imread('imagenes/fingerprint.png', 0) / 255
+fing = binarise(fing)
 fing.shape, fing.dtype
 
 
-# In[9]:
+# In[11]:
 
 
 plt.imshow(fing, cmap='gray')
 
 
-# In[13]:
+# In[14]:
 
 
 kernel = structuring_circle(radius=2)
-side_by_side(fing, closing(opening(fing, kernel), kernel))
+fing_filtered = closing(opening(fing, kernel), kernel)
+side_by_side(fing, fing_filtered)
+
+
+# In[20]:
+
+
+plt.imshow(cv.bitwise_and(fing, fing_filtered), cmap='gray')
+
+
+# In[86]:
+
+
+fing2 = fing.copy()
+fing2[:,100:300] = 0
+plt.imshow(fing2, cmap='gray')
+
+
+# In[87]:
+
+
+fing3 = fing.copy()
+fing3[100:300,:] = 0
+plt.imshow(fing3, cmap='gray')
+
+
+# In[88]:
+
+
+fing4 = cv.bitwise_or(fing2, fing3)
+side_by_side(fing4, cv.bitwise_not(fing4)) 
+
+
+# In[67]:
+
+
+reduce(lambda x, y: x and y, (fing == fing3).flatten())
+
+
+# In[69]:
+
+
+if np.equal(fing, fing3).prod():
+    print('iguales')
+
+
+# In[37]:
+
+
+_x.prod()
+
+
+# In[47]:
+
+
+fing[1,1:24], reverse(fing[1,1:24])
+
+
+# In[91]:
+
+
+merged = reduce(lambda x, y: cv.bitwise_or(x, y), [fing2, fing3, cv.bitwise_not(fing)])
+plt.imshow(merged, cmap='gray')
+
+
+# In[97]:
+
+
+type(fing[0,0])
+
+
+# In[99]:
+
+
+class DontCare(np.float64):
+    """
+    
+    """
+    def __mul__(self, lol):
+        return lol
+
+
+# In[101]:
+
+
+x = DontCare()
+
+
+# In[102]:
+
+
+x * 5
 
 
 # In[ ]:
 
 
-
+dil
 
