@@ -74,7 +74,13 @@ def reverse(src: np.ndarray) -> np.ndarray:
     """
     """
     return 1.0 - src
+#
 
+def complement(src: np.ndarray) -> np.ndarray:
+    """
+    """
+    return 1.0 - src
+#
 
 def side_by_side(
     image1: np.ndarray, 
